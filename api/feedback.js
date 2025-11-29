@@ -31,14 +31,14 @@ export default async function handler(req, res) {
     description: "✨ **Someone submitted new feedback!**",
     color: 0x5865f2,
     fields: [
-      { name: "👤 User", value: `\`${username}\``, inline: false },
+      { name: "👤 Username ⬇️", value: `\`${username}\``, inline: false },
       {
-        name: "🌐 Server Link",
-        value: serverLink ? `[Join Server](${serverLink})` : "_Not provided_",
+        name: "🌐 Server Link ⬇️",
+        value: serverLink ? `${serverLink}` : "_Not provided_",
         inline: false,
       },
       {
-        name: "📝 Feedback",
+        name: "📝 Feedback ⬇️",
         value: `> ${feedback.replace(/\n/g, "\n> ")}`,
         inline: false,
       },
