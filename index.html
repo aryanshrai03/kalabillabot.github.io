@@ -781,49 +781,56 @@
         </footer>
     </div>
 <script>
-  const form = document.getElementById("feedbackForm");
-  const sendBtn = document.getElementById("sendBtn");
-  const statusMsg = document.getElementById("statusMsg");
+const form = document.getElementById("feedbackForm");
+const sendBtn = document.getElementById("sendBtn");
+const statusMsg = document.getElementById("statusMsg");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    const payload = {
-      username: document.getElementById("discordUsername").value.trim(),
-      serverLink: document.getElementById("serverLink").value.trim(),
-      feedback: document.getElementById("feedbackText").value.trim(),
-    };
+  const payload = {
+    username: document.getElementById("discordUsername").value.trim(),
+    serverLink: document.getElementById("serverLink").value.trim(),
+    feedback: document.getElementById("feedbackText").value.trim(),
+  };
 
-    if (!payload.username || !payload.feedback) {
-      statusMsg.textContent = "❌ You must enter a name and feedback.";
-      statusMsg.style.color = "red";
-      return;
+  if (!payload.username || !payload.feedback) {
+    statusMsg.textContent = "❌ You must enter a username and feedback.";
+    statusMsg.style.color = "#e11d48";
+    return;
+  }
+
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Sending...";
+  statusMsg.textContent = "";
+
+  try {
+    const res = await fetch("/api/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw new Error(data.message || `HTTP ${res.status}`);
     }
 
-    sendBtn.disabled = true;
-    sendBtn.textContent = "Sending...";
-
-    try {
-      const res = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) throw new Error();
-
-      statusMsg.textContent = "✅ Feedback sent successfully!";
-      statusMsg.style.color = "lightgreen";
-      form.reset();
-    } catch (err) {
-      statusMsg.textContent = "❌ Failed to send feedback.";
-      statusMsg.style.color = "red";
-    }
-
+    statusMsg.textContent = "✅ Feedback sent successfully!";
+    statusMsg.style.color = "green";
+    form.reset();
+  } catch (err) {
+    console.error("Frontend error:", err);
+    statusMsg.textContent = "❌ Failed to send feedback: " + err.message;
+    statusMsg.style.color = "#e11d48";
+  } finally {
     sendBtn.disabled = false;
     sendBtn.textContent = "Send";
-  });
+  }
+});
 </script>
+
     
     <script>
         function toggleTheme() {
