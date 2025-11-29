@@ -765,20 +765,67 @@
         </div>
 
         <h2 class="section-title">💌 Send Feedback</h2>
-        <div class="feedback-section">
-            <form class="feedback-form" onsubmit="return false;">
-                <input type="text" class="form-input" placeholder="Discord username" />
-                <input type="text" class="form-input" placeholder="Server link (optional)" />
-                <textarea class="form-input" placeholder="Write your feedback..."></textarea>
-                <button type="submit" class="send-btn">Send</button>
-            </form>
+
+    <form id="feedbackForm">
+      <input type="text" class="form-input" id="discordUsername" placeholder="Discord username" required />
+      <input type="text" class="form-input" id="serverLink" placeholder="Server link (optional)" />
+      <textarea class="form-input" id="feedbackText" placeholder="Write your feedback..." rows="6" required></textarea>
+      <button type="submit" class="send-btn" id="sendBtn">Send</button>
+    </form>
+
+    <p id="statusMsg" style="margin-top:10px; font-size:14px;"></p>
+  </div>
         </div>
 
         <footer>
             © 2025 Kala Billa Bot — Made with 💢
         </footer>
     </div>
+<script>
+  const form = document.getElementById("feedbackForm");
+  const sendBtn = document.getElementById("sendBtn");
+  const statusMsg = document.getElementById("statusMsg");
 
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      username: document.getElementById("discordUsername").value.trim(),
+      serverLink: document.getElementById("serverLink").value.trim(),
+      feedback: document.getElementById("feedbackText").value.trim(),
+    };
+
+    if (!payload.username || !payload.feedback) {
+      statusMsg.textContent = "❌ You must enter a name and feedback.";
+      statusMsg.style.color = "red";
+      return;
+    }
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending...";
+
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error();
+
+      statusMsg.textContent = "✅ Feedback sent successfully!";
+      statusMsg.style.color = "lightgreen";
+      form.reset();
+    } catch (err) {
+      statusMsg.textContent = "❌ Failed to send feedback.";
+      statusMsg.style.color = "red";
+    }
+
+    sendBtn.disabled = false;
+    sendBtn.textContent = "Send";
+  });
+</script>
+    
     <script>
         function toggleTheme() {
             const body = document.body;
