@@ -14,7 +14,7 @@
         :root {
             --primary: #6ba5e7;
             --secondary: #4a8dd9;
-            --background: #9ac9f5;
+            --background: #e8f4ff;
             --card-bg: #ffffff;
             --text-primary: #1e3a5f;
             --text-secondary: #4a6fa5;
@@ -120,6 +120,10 @@
                 opacity: 1;
                 transform: scale(1);
             }
+        }
+        
+        img {
+        animation: float 4s ease-in-out infinite;
         }
 
         h1 {
@@ -362,24 +366,35 @@
 <body>
     <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
-    <div class="container">
+  
+           <div class="container">
         <div class="header">
             <img src="https://cdn.discordapp.com/avatars/1443567723404853408/cfa23a69db79a8cfd18bc84512a17aa6.webp?size=1024" alt="Kala Billa Bot" class="profile-img">
-            <h1>💢 Kala Billa</h1>
+            <h1><img src="https://cdn.discordapp.com/emojis/1443586262412955779.png" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 10px;">Kala Billa</h1>
             <p class="subtitle">Your awesome Discord companion 🎮</p>
             <div class="button-group">
-                <a href="#" class="btn">➕ Invite Kala Billa</a>
-                <a href="#" class="btn">💬 Support Server</a>
-                <a href="#" class="btn">📸 Instagram</a>
+                <a href="https://discord.com/oauth2/authorize?client_id=1443567723404853408&permissions=8&integration_type=0&scope=bot+applications.commands" class="btn" target="_blank">➕ Invite Kala Billa</a>
+                <a href="https://discord.gg/twNGK45BuH" class="btn" target="_blank">💬 Support Server</a>
+                <a href="https://www.instagram.com/dev.bkt/" class="btn" target="_blank">📸 Instagram</a>
             </div>
         </div>
 
-        <h2 class="section-title">✨ Features</h2>
+         <h2 class="section-title">✨ Features</h2>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="emoji">🎵</div>
                 <h3>Fun Commands</h3>
                 <p>Memes, games, and entertainment</p>
+            </div>
+            <div class="feature-card">
+                <div class="emoji">🤖</div>
+                <h3>AI Chat</h3>
+                <p>Chat with advanced AI</p>
+            </div>
+            <div class="feature-card">
+                <div class="emoji">🎟️</div>
+                <h3>Ticket System</h3>
+                <p>Professional support system</p>
             </div>
             <div class="feature-card">
                 <div class="emoji">🎉</div>
