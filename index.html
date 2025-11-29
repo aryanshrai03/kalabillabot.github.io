@@ -766,15 +766,13 @@
 
         <h2 class="section-title">💌 Send Feedback</h2>
 
-    <form id="feedbackForm">
-      <input type="text" class="form-input" id="discordUsername" placeholder="Discord username" required />
-      <input type="text" class="form-input" id="serverLink" placeholder="Server link (optional)" />
-      <textarea class="form-input" id="feedbackText" placeholder="Write your feedback..." rows="6" required></textarea>
-      <button type="submit" class="send-btn" id="sendBtn">Send</button>
-    </form>
-
-    <p id="statusMsg" style="margin-top:10px; font-size:14px;"></p>
-  </div>
+    <div class="feedback-section">
+            <form class="feedback-form" onsubmit="return false;">
+                <input type="text" class="form-input" placeholder="Discord username" />
+                <input type="text" class="form-input" placeholder="Server link (optional)" />
+                <textarea class="form-input" placeholder="Write your feedback..."></textarea>
+                <button type="submit" class="send-btn">Send</button>
+            </form>
         </div>
 
         <footer>
