@@ -1,9 +1,30 @@
 export default async function handler(req, res) {
+  // Allow only POST
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { username, serverLink, feedback } = req.body;
+  // Parse body safely (Vercel can give string or object)
+  let body = req.body;
+  if (typeof body === "string") {
+    try {
+      body = JSON.parse(body);
+    } catch (e) {
+      return res.status(400).json({ message: "Invalid JSON body" });
+    }
+  }
+
+  const { username, serverLink, feedback } = body || {};
+
+  if (!username || !feedback) {
+    return res.status(400).json({ message: "Missing username or feedback" });
+  }
+
+  const webhookUrl = process.env.WEBHOOK_URL;
+  if (!webhookUrl) {
+    console.error("WEBHOOK_URL env var is not set");
+    return res.status(500).json({ message: "Server misconfigured (no WEBHOOK_URL)" });
+  }
 
   const embed = {
     title: "💌 New Feedback Received",
@@ -14,24 +35,35 @@ export default async function handler(req, res) {
       {
         name: "🌐 Server Link",
         value: serverLink ? `[Join Server](${serverLink})` : "_Not provided_",
-        inline: false
+        inline: false,
       },
       {
         name: "📝 Feedback",
         value: `> ${feedback.replace(/\n/g, "\n> ")}`,
-        inline: false
-      }
+        inline: false,
+      },
     ],
     footer: { text: "📩 From Web Feedback Form" },
     timestamp: new Date().toISOString(),
   };
 
   try {
-    await fetch(process.env.WEBHOOK_URL, {
+    const discordRes = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: "📬 **New Feedback!**", embeds: [embed] })
+      body: JSON.stringify({
+        content: "📬 **New Feedback!**",
+        embeds: [embed],
+      }),
     });
+
+    if (!discordRes.ok) {
+      const text = await discordRes.text();
+      console.error("Discord webhook error:", discordRes.status, text);
+      return res.status(500).json({
+        message: `Discord webhook failed (${discordRes.status})`,
+      });
+    }
 
     return res.status(200).json({ success: true });
   } catch (err) {
