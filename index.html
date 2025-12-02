@@ -766,21 +766,48 @@
 
         <h2 class="section-title">💌 Send Feedback</h2>
 
-    <div class="feedback-section">
+<div class="feedback-section">
     <form class="feedback-form" id="feedbackForm">
         <input type="text" class="form-input" id="discordUsername" placeholder="Discord username" />
         <input type="text" class="form-input" id="serverLink" placeholder="Server link (optional)" />
         <textarea class="form-input" id="feedbackText" placeholder="Write your feedback..."></textarea>
-        <button type="submit" class="send-btn" id="sendBtn">Send</button>
+
+        <!-- 🔐 reCAPTCHA widget (no style changed) -->
+        <div
+          class="g-recaptcha"
+          data-sitekey="6LeCfR4sAAAAAKlRnkyAWWP3qFQhyCplUrzmimNh"
+          data-callback="onCaptchaSuccess"
+          data-expired-callback="onCaptchaExpired"
+        ></div>
+
+        <button type="submit" class="send-btn" id="sendBtn" disabled>Send</button>
     </form>
     <p id="statusMsg" style="margin-top:10px; font-size:14px;"></p>
 </div>
+
 
         <footer>
             © 2025 Kala Billa Bot — Made with 💢
         </footer>
     </div>
+<!-- Google reCAPTCHA script -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <script>
+let captchaPassed = false;
+
+function onCaptchaSuccess() {
+  captchaPassed = true;
+  const sendBtn = document.getElementById("sendBtn");
+  sendBtn.disabled = false; // unlock button
+}
+
+function onCaptchaExpired() {
+  captchaPassed = false;
+  const sendBtn = document.getElementById("sendBtn");
+  sendBtn.disabled = true;
+}
+
 const form = document.getElementById("feedbackForm");
 const sendBtn = document.getElementById("sendBtn");
 const statusMsg = document.getElementById("statusMsg");
@@ -788,14 +815,19 @@ const statusMsg = document.getElementById("statusMsg");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const payload = {
-    username: document.getElementById("discordUsername").value.trim(),
-    serverLink: document.getElementById("serverLink").value.trim(),
-    feedback: document.getElementById("feedbackText").value.trim(),
-  };
+  const username = document.getElementById("discordUsername").value.trim();
+  const serverLink = document.getElementById("serverLink").value.trim();
+  const feedback = document.getElementById("feedbackText").value.trim();
+  const token = grecaptcha.getResponse(); // captcha token
 
-  if (!payload.username || !payload.feedback) {
+  if (!username || !feedback) {
     statusMsg.textContent = "❌ You must enter a username and feedback.";
+    statusMsg.style.color = "#e11d48";
+    return;
+  }
+
+  if (!captchaPassed || !token) {
+    statusMsg.textContent = "❌ Please complete the captcha first.";
     statusMsg.style.color = "#e11d48";
     return;
   }
@@ -808,7 +840,7 @@ form.addEventListener("submit", async (e) => {
     const res = await fetch("/api/feedback", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ username, serverLink, feedback, token }),
     });
 
     const data = await res.json().catch(() => ({}));
@@ -820,12 +852,21 @@ form.addEventListener("submit", async (e) => {
     statusMsg.textContent = "✅ Feedback sent successfully!";
     statusMsg.style.color = "green";
     form.reset();
+
+    // 🔒 Lock button again & reset captcha so they must solve it again
+    captchaPassed = false;
+    grecaptcha.reset();
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Send";
   } catch (err) {
     console.error("Frontend error:", err);
     statusMsg.textContent = "❌ Failed to send feedback: " + err.message;
     statusMsg.style.color = "#e11d48";
-  } finally {
-    sendBtn.disabled = false;
+
+    // Keep captcha state, but re-lock the button to avoid spam attempts
+    sendBtn.disabled = true;
+    grecaptcha.reset();
+    captchaPassed = false;
     sendBtn.textContent = "Send";
   }
 });
