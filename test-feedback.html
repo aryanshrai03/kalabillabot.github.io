@@ -1484,7 +1484,7 @@
           throw new Error(data.message || `HTTP ${res.status}`);
         }
 
-        statusMsg.textContent = ":white_check_mark: Feedback sent successfully!";
+        statusMsg.textContent = "✅ Feedback sent successfully!";
         statusMsg.style.color = "green";
         feedbackForm.reset();
 
@@ -1495,7 +1495,7 @@
         sendBtn.textContent = "Send";
       } catch (err) {
         console.error("Frontend error:", err);
-        statusMsg.textContent = ":x: Failed to send feedback: " + err.message;
+        statusMsg.textContent = "❌ Failed to send feedback: " + err.message;
         statusMsg.style.color = "#e11d48";
 
         sendBtn.disabled = true;
