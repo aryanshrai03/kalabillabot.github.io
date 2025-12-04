@@ -1060,7 +1060,7 @@
     <!-- 📝 Feedback Section -->
     <section id="feedback" style="padding: 4rem 20px 0;">
         <div class="section-title">
-            <h2>l💌 Send Feedback</h2>
+            <h2>💌 Send Feedback</h2>
             <p>Tell us what you think about Kala Billa — bugs, ideas, or just vibes!</p>
         </div>
 
@@ -1413,91 +1413,101 @@
         }
     </script>
 
-        <!-- reCAPTCHA -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-    <!-- Feedback Form Logic -->
-    <script>
-        let captchaPassed = false;
+<script>
+(function () {
+  let captchaPassed = false;
 
-        // reCAPTCHA callbacks (must be global)
-        function onCaptchaSuccess() {
-            captchaPassed = true;
-            const sendBtn = document.getElementById("sendBtn");
-            if (sendBtn) sendBtn.disabled = false; // unlock button
+  const feedbackForm = document.getElementById("feedbackForm");
+  const sendBtn = document.getElementById("sendBtn");
+  const statusMsg = document.getElementById("statusMsg");
+
+  // Make sure reCAPTCHA can see these as globals
+  window.onCaptchaSuccess = function () {
+    captchaPassed = true;
+    if (sendBtn) {
+      sendBtn.disabled = false;   // unlock button
+    }
+    console.log("reCAPTCHA success"); // optional debug
+  };
+
+  window.onCaptchaExpired = function () {
+    captchaPassed = false;
+    if (sendBtn) {
+      sendBtn.disabled = true;
+    }
+    console.log("reCAPTCHA expired"); // optional debug
+  };
+
+  if (feedbackForm && sendBtn && statusMsg) {
+    feedbackForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const username = document
+        .getElementById("discordUsername")
+        .value.trim();
+      const serverLink = document
+        .getElementById("serverLink")
+        .value.trim();
+      const feedback = document
+        .getElementById("feedbackText")
+        .value.trim();
+      const token = grecaptcha.getResponse(); // captcha token
+
+      if (!username || !feedback) {
+        statusMsg.textContent = ":x: You must enter a username and feedback.";
+        statusMsg.style.color = "#e11d48";
+        return;
+      }
+
+      if (!captchaPassed || !token) {
+        statusMsg.textContent = ":x: Please complete the captcha first.";
+        statusMsg.style.color = "#e11d48";
+        return;
+      }
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Sending...";
+      statusMsg.textContent = "";
+
+      try {
+        const res = await fetch("/api/feedback", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, serverLink, feedback, token }),
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          throw new Error(data.message || `HTTP ${res.status}`);
         }
 
-        function onCaptchaExpired() {
-            captchaPassed = false;
-            const sendBtn = document.getElementById("sendBtn");
-            if (sendBtn) sendBtn.disabled = true;
-        }
+        statusMsg.textContent = ":white_check_mark: Feedback sent successfully!";
+        statusMsg.style.color = "green";
+        feedbackForm.reset();
 
-        const feedbackForm = document.getElementById("feedbackForm");
-        const sendBtn = document.getElementById("sendBtn");
-        const statusMsg = document.getElementById("statusMsg");
+        // lock again & reset captcha
+        captchaPassed = false;
+        grecaptcha.reset();
+        sendBtn.disabled = true;
+        sendBtn.textContent = "Send";
+      } catch (err) {
+        console.error("Frontend error:", err);
+        statusMsg.textContent = ":x: Failed to send feedback: " + err.message;
+        statusMsg.style.color = "#e11d48";
 
-        if (feedbackForm && sendBtn && statusMsg) {
-            feedbackForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
+        sendBtn.disabled = true;
+        grecaptcha.reset();
+        captchaPassed = false;
+        sendBtn.textContent = "Send";
+      }
+    });
+  }
+})();
+</script>
 
-                const username = document.getElementById("discordUsername").value.trim();
-                const serverLink = document.getElementById("serverLink").value.trim();
-                const feedback = document.getElementById("feedbackText").value.trim();
-                const token = grecaptcha.getResponse(); // captcha token
-
-                if (!username || !feedback) {
-                    statusMsg.textContent = ":x: You must enter a username and feedback.";
-                    statusMsg.style.color = "#e11d48";
-                    return;
-                }
-
-                if (!captchaPassed || !token) {
-                    statusMsg.textContent = ":x: Please complete the captcha first.";
-                    statusMsg.style.color = "#e11d48";
-                    return;
-                }
-
-                sendBtn.disabled = true;
-                sendBtn.textContent = "Sending...";
-                statusMsg.textContent = "";
-
-                try {
-                    const res = await fetch("/api/feedback", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ username, serverLink, feedback, token }),
-                    });
-
-                    const data = await res.json().catch(() => ({}));
-
-                    if (!res.ok) {
-                        throw new Error(data.message || \`HTTP \${res.status}\`);
-                    }
-
-                    statusMsg.textContent = ":white_check_mark: Feedback sent successfully!";
-                    statusMsg.style.color = "green";
-                    feedbackForm.reset();
-
-                    // :lock: Lock button again & reset captcha so they must solve it again
-                    captchaPassed = false;
-                    grecaptcha.reset();
-                    sendBtn.disabled = true;
-                    sendBtn.textContent = "Send";
-                } catch (err) {
-                    console.error("Frontend error:", err);
-                    statusMsg.textContent = ":x: Failed to send feedback: " + err.message;
-                    statusMsg.style.color = "#e11d48";
-
-                    // Keep captcha state, but re-lock the button to avoid spam attempts
-                    sendBtn.disabled = true;
-                    grecaptcha.reset();
-                    captchaPassed = false;
-                    sendBtn.textContent = "Send";
-                }
-            });
-        }
-    </script>
 
 </body>
 </html>
