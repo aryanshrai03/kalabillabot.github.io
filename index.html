@@ -559,7 +559,7 @@
         .cmd-name { font-weight: 700; color: #555; font-family: 'monospace'; }
         .cmd-icon { color: #ccc; }
         .cmd-chip:hover .cmd-icon { color: var(--primary-blue); }
- 
+
         /* Toast Notification */
         .toast {
             position: fixed;
@@ -580,86 +580,6 @@
         }
         
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-        
-        /* --- 📝 FEEDBACK SECTION --- */
-        .feedback-wrap {
-            max-width: 600px;
-            margin: 0 auto 40px;
-            background: white;
-            padding: 30px 24px;
-            border-radius: var(--radius-card);
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(255, 214, 224, 0.7);
-        }
-
-        .feedback-section {
-            width: 100%;
-        }
-
-        .feedback-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .feedback-form .form-input {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            font-family: inherit;
-            font-size: 0.95rem;
-            background: #f9fafb;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-        }
-
-        .feedback-form .form-input:focus {
-            background: #ffffff;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(173, 216, 255, 0.35);
-        }
-
-        .feedback-form textarea.form-input {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .send-btn {
-            margin-top: 6px;
-            padding: 12px 24px;
-            border-radius: var(--radius-pill);
-            border: none;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            background: var(--gradient-btn);
-            color: var(--text-dark);
-            box-shadow: 0 8px 20px -5px rgba(160, 200, 255, 0.6);
-            transition: all 0.25s ease;
-        }
-
-        .send-btn:hover:not(:disabled) {
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: 0 12px 25px -5px rgba(255, 180, 200, 0.7);
-            background: var(--gradient-hover);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .feedback-note {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-top: 6px;
-            text-align: center;
-        }
 
         /* --- 🦶 FOOTER --- */
         footer {
@@ -1057,53 +977,6 @@
             <div class="cmd-grid" id="grid-utility"></div>
         </div>
     </section>
-    <!-- 📝 Feedback Section -->
-    <section id="feedback" style="padding: 4rem 20px 0;">
-        <div class="section-title">
-            <h2>:love_letter: Send Feedback</h2>
-            <p>Tell us what you think about Kala Billa — bugs, ideas, or just vibes!</p>
-        </div>
-
-        <div class="feedback-wrap">
-            <div class="feedback-section">
-                <form class="feedback-form" id="feedbackForm">
-                    <input
-                        type="text"
-                        class="form-input"
-                        id="discordUsername"
-                        placeholder="Discord username (e.g. user#0000)"
-                    />
-                    <input
-                        type="text"
-                        class="form-input"
-                        id="serverLink"
-                        placeholder="Server link (optional)"
-                    />
-                    <textarea
-                        class="form-input"
-                        id="feedbackText"
-                        placeholder="Write your feedback..."
-                    ></textarea>
-
-                    <!-- :closed_lock_with_key: reCAPTCHA widget (no style changed) -->
-                    <div
-                        class="g-recaptcha"
-                        data-sitekey="6LcUBB8sAAAAAD7M_i1GIHfOxqR47mbw9qKYgGT1"
-                        data-callback="onCaptchaSuccess"
-                        data-expired-callback="onCaptchaExpired"
-                        align="center"
-                    ></div>
-
-                    <button type="submit" class="send-btn" id="sendBtn" disabled>
-                        Send
-                    </button>
-                </form>
-
-                <p id="statusMsg" style="margin-top:10px; font-size:14px;"></p>
-                <p class="feedback-note">reCAPTCHA is used to prevent spam submissions.</p>
-            </div>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer>
@@ -1412,92 +1285,5 @@
             setTimeout(() => btn.style.transform = "scale(1)", 150);
         }
     </script>
-
-        <!-- reCAPTCHA -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-    <!-- Feedback Form Logic -->
-    <script>
-        let captchaPassed = false;
-
-        // reCAPTCHA callbacks (must be global)
-        function onCaptchaSuccess() {
-            captchaPassed = true;
-            const sendBtn = document.getElementById("sendBtn");
-            if (sendBtn) sendBtn.disabled = false; // unlock button
-        }
-
-        function onCaptchaExpired() {
-            captchaPassed = false;
-            const sendBtn = document.getElementById("sendBtn");
-            if (sendBtn) sendBtn.disabled = true;
-        }
-
-        const feedbackForm = document.getElementById("feedbackForm");
-        const sendBtn = document.getElementById("sendBtn");
-        const statusMsg = document.getElementById("statusMsg");
-
-        if (feedbackForm && sendBtn && statusMsg) {
-            feedbackForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
-
-                const username = document.getElementById("discordUsername").value.trim();
-                const serverLink = document.getElementById("serverLink").value.trim();
-                const feedback = document.getElementById("feedbackText").value.trim();
-                const token = grecaptcha.getResponse(); // captcha token
-
-                if (!username || !feedback) {
-                    statusMsg.textContent = ":x: You must enter a username and feedback.";
-                    statusMsg.style.color = "#e11d48";
-                    return;
-                }
-
-                if (!captchaPassed || !token) {
-                    statusMsg.textContent = ":x: Please complete the captcha first.";
-                    statusMsg.style.color = "#e11d48";
-                    return;
-                }
-
-                sendBtn.disabled = true;
-                sendBtn.textContent = "Sending...";
-                statusMsg.textContent = "";
-
-                try {
-                    const res = await fetch("/api/feedback", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ username, serverLink, feedback, token }),
-                    });
-
-                    const data = await res.json().catch(() => ({}));
-
-                    if (!res.ok) {
-                        throw new Error(data.message || \`HTTP \${res.status}\`);
-                    }
-
-                    statusMsg.textContent = ":white_check_mark: Feedback sent successfully!";
-                    statusMsg.style.color = "green";
-                    feedbackForm.reset();
-
-                    // :lock: Lock button again & reset captcha so they must solve it again
-                    captchaPassed = false;
-                    grecaptcha.reset();
-                    sendBtn.disabled = true;
-                    sendBtn.textContent = "Send";
-                } catch (err) {
-                    console.error("Frontend error:", err);
-                    statusMsg.textContent = ":x: Failed to send feedback: " + err.message;
-                    statusMsg.style.color = "#e11d48";
-
-                    // Keep captcha state, but re-lock the button to avoid spam attempts
-                    sendBtn.disabled = true;
-                    grecaptcha.reset();
-                    captchaPassed = false;
-                    sendBtn.textContent = "Send";
-                }
-            });
-        }
-    </script>
-
 </body>
 </html>
