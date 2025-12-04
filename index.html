@@ -488,6 +488,258 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
+        /* --- 💌 FEEDBACK MODAL --- */
+        .feedback-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 5000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feedback-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .feedback-modal {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(255, 182, 193, 0.3);
+            border: 2px solid var(--primary-pink);
+            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--primary-pink);
+            transform: rotate(90deg);
+        }
+
+        .feedback-modal h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .feedback-modal > p {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 25px;
+        }
+
+        .feedback-modal-icon {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        /* Scrollbar styling for modal */
+        .feedback-modal::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .feedback-modal::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .feedback-modal::-webkit-scrollbar-thumb {
+            background: var(--primary-pink);
+            border-radius: 4px;
+        }
+
+        .feedback-modal::-webkit-scrollbar-thumb:hover {
+            background: #FF9EBC;
+        }
+
+        /* --- 💌 FEEDBACK SECTION --- */
+        .feedback-section {
+            background: white;
+            max-width: 700px;
+            margin: 80px auto;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: var(--shadow-soft);
+            border: 2px solid var(--primary-pink);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feedback-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--primary-pink) 0%, transparent 70%);
+            opacity: 0.1;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .feedback-section h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .feedback-section > p {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            color: var(--text-dark);
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-pink);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .captcha-container {
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            background: rgba(221, 238, 251, 0.3);
+            border-radius: 12px;
+        }
+
+        .submit-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        #sendBtn {
+            flex: 1;
+        }
+
+        #sendBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #statusMsg {
+            text-align: center;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            min-height: 20px;
+            animation: fadeInMsg 0.3s ease;
+        }
+
+        #statusMsg.success {
+            background: rgba(76, 209, 55, 0.1);
+            color: #4cd137;
+            border-left: 4px solid #4cd137;
+            text-align: left;
+            padding-left: 16px;
+        }
+
+        #statusMsg.error {
+            background: rgba(225, 29, 72, 0.1);
+            color: #e11d48;
+            border-left: 4px solid #e11d48;
+            text-align: left;
+            padding-left: 16px;
+        }
+
+        @keyframes fadeInMsg {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
         /* --- ⌨️ COMMANDS SECTION --- */
         .commands-section {
             max-width: var(--container-width);
@@ -637,17 +889,9 @@
             .demo-section { padding: 20px; }
             .cmd-grid { grid-template-columns: 1fr; }
             .hero-content h1 { font-size: 2rem; }
-            .navbar { justify-content: space-between; padding: 0.8rem 1rem; }
-            .navbar .nav-actions { display: flex; }
+            .navbar { justify-content: center; }
+            .navbar .nav-actions { display: none; }
             .logo span { display: inline; }
-            .logo { font-size: 1.2rem; }
-            .logo-image { width: 35px; height: 35px; }
-            .btn { padding: 10px 20px; font-size: 0.9rem; }
-            .btn-icon-only { padding: 8px; width: 38px; height: 38px; }
-            .hero-content { padding: 0 10px; }
-            .hero-content p { font-size: 1.1rem; }
-            .hero-badges { gap: 10px; }
-            .badge-item { font-size: 0.85rem; padding: 6px 12px; }
         }
         
         /* Reduced Motion */
@@ -759,7 +1003,7 @@
     <div id="loading-screen">
         <div class="loading-container">
             <div class="loading-image">
-                <img src="main.png" alt="Kala Billa Loading">
+                <img src="https://i.ibb.co/7NGTMkM4/image.webp" alt="Kala Billa Loading">
             </div>
             <div class="loading-text">Kala Billa</div>
             <div class="loading-dots">.</div>
@@ -775,11 +1019,54 @@
     <!-- Custom Cursor Element -->
     <div id="cursor" class="cursor-follower"></div>
 
+    <!-- 💌 Feedback Modal -->
+    <div id="feedbackModalOverlay" class="feedback-modal-overlay">
+        <div class="feedback-modal">
+            <button id="modalCloseBtn" class="modal-close-btn" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="feedback-modal-icon">💌</div>
+            <h2>Send us <span style="color: #FF9EBC;">Feedback</span></h2>
+            <p>We'd love to hear what you think about Kala Billa!</p>
+            
+            <form id="feedbackFormModal">
+                <div class="form-group">
+                    <label for="discordUsernameModal"><i class="fas fa-user"></i> Discord Username</label>
+                    <input type="text" id="discordUsernameModal" placeholder="e.g., YourName#1234" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="serverLinkModal"><i class="fas fa-link"></i> Server Link (Optional)</label>
+                    <input type="url" id="serverLinkModal" placeholder="https://discord.gg/...">
+                </div>
+
+                <div class="form-group">
+                    <label for="feedbackTextModal"><i class="fas fa-comments"></i> Your Feedback</label>
+                    <textarea id="feedbackTextModal" placeholder="Tell us what you think... suggestions, bugs, or just love notes! 💕" required></textarea>
+                </div>
+
+                <!-- reCAPTCHA -->
+                <div class="captcha-container">
+                    <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY" data-callback="onCaptchaSuccessModal" data-expired-callback="onCaptchaExpiredModal"></div>
+                </div>
+
+                <div class="submit-group">
+                    <button type="submit" id="sendBtnModal" class="btn btn-primary" disabled>
+                        <i class="fas fa-paper-plane"></i> Send Feedback
+                    </button>
+                </div>
+
+                <div id="statusMsgModal"></div>
+            </form>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar">
         <a href="#" class="logo">
             <div class="logo-image">
-                <img src="main.png" alt="Kala Billa">
+                <img src="https://i.ibb.co/7NGTMkM4/image.webp" alt="Kala Billa">
             </div>
             <span>Kala Billa</span>
         </a>
@@ -789,6 +1076,9 @@
             <a href="#" id="nav-demo-btn">Demo</a>
         </div>
         <div class="nav-actions">
+            <button id="feedback-btn" class="btn btn-icon-only btn-secondary" aria-label="Feedback" title="Send Feedback">
+                <i class="fas fa-envelope"></i>
+            </button>
             <a href="https://github.com/devrock07" target="_blank" class="btn btn-icon-only btn-secondary" aria-label="GitHub">
                 <i class="fab fa-github"></i>
             </a>
@@ -802,7 +1092,7 @@
             <h1>Kala Billa — Our awesome<br><span>Discord Companion</span></h1>
             <p>Cute, comfy, and always online. The perfect mix of memes, AI chat, moderation, and giveaways for your community.</p>
             
-            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: inherit;">
                 <a href="#" id="hero-invite-btn" class="btn btn-primary" onclick="confettiEffect(event)">
                     <i class="fas fa-star"></i> Invite Kala Billa
                 </a>
@@ -924,7 +1214,7 @@
 
             <!-- Player -->
             <div id="player-cat" class="player-cat">
-                <img src="main.png" alt="Kala Billa" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                <img src="https://i.ibb.co/7NGTMkM4/image.webp" alt="Kala Billa" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
             </div>
         </div>
     </section>
@@ -1001,6 +1291,9 @@
         <i class="fas fa-check-circle" style="color: #4cd137; font-size: 1.2rem;"></i>
         <span>Copied to clipboard!</span>
     </div>
+
+    <!-- reCAPTCHA Script -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <!-- ✨ JAVASCRIPT LOGIC ✨ -->
     <script>
@@ -1284,6 +1577,195 @@
             btn.style.transform = "scale(0.9)";
             setTimeout(() => btn.style.transform = "scale(1)", 150);
         }
+
+        // --- 💌 FEEDBACK MODAL SYSTEM ---
+        const feedbackBtn = document.getElementById("feedback-btn");
+        const modalOverlay = document.getElementById("feedbackModalOverlay");
+        const modalCloseBtn = document.getElementById("modalCloseBtn");
+        let captchaPassedModal = false;
+
+        // Open Modal
+        feedbackBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            modalOverlay.classList.add("active");
+        });
+
+        // Close Modal
+        modalCloseBtn.addEventListener("click", () => {
+            modalOverlay.classList.remove("active");
+        });
+
+        // Close Modal when clicking outside
+        modalOverlay.addEventListener("click", (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove("active");
+            }
+        });
+
+        // Close Modal with Escape key
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && modalOverlay.classList.contains("active")) {
+                modalOverlay.classList.remove("active");
+            }
+        });
+
+        // Captcha callbacks for modal
+        function onCaptchaSuccessModal() {
+            captchaPassedModal = true;
+            const sendBtn = document.getElementById("sendBtnModal");
+            sendBtn.disabled = false;
+        }
+
+        function onCaptchaExpiredModal() {
+            captchaPassedModal = false;
+            const sendBtn = document.getElementById("sendBtnModal");
+            sendBtn.disabled = true;
+        }
+
+        const formModal = document.getElementById("feedbackFormModal");
+        const sendBtnModal = document.getElementById("sendBtnModal");
+        const statusMsgModal = document.getElementById("statusMsgModal");
+
+        formModal.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById("discordUsernameModal").value.trim();
+            const serverLink = document.getElementById("serverLinkModal").value.trim();
+            const feedback = document.getElementById("feedbackTextModal").value.trim();
+            const token = grecaptcha.getResponse();
+
+            // Validation
+            if (!username || !feedback) {
+                statusMsgModal.textContent = "Uhm You must enter a username and feedback.";
+                statusMsgModal.className = "error";
+                return;
+            }
+
+            if (!captchaPassedModal || !token) {
+                statusMsgModal.textContent = "Ahh Please complete the captcha first.";
+                statusMsgModal.className = "error";
+                return;
+            }
+
+            sendBtnModal.disabled = true;
+            sendBtnModal.textContent = "✨ Sending...";
+            statusMsgModal.textContent = "";
+
+            try {
+                const res = await fetch("/api/feedback", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, serverLink, feedback, token }),
+                });
+
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    throw new Error(data.message || `HTTP ${res.status}`);
+                }
+
+                statusMsgModal.textContent = "Hehe Feedback sent successfully! Thank you so much! 💕";
+                statusMsgModal.className = "success";
+                
+                // Reset and close modal after success
+                formModal.reset();
+                captchaPassedModal = false;
+                grecaptcha.reset();
+                sendBtnModal.disabled = true;
+                sendBtnModal.textContent = "Send Feedback";
+
+                // Close modal after 2 seconds
+                setTimeout(() => {
+                    modalOverlay.classList.remove("active");
+                }, 2000);
+            } catch (err) {
+                console.error("Frontend error:", err);
+                statusMsgModal.textContent = "Uhm Failed to send feedback: " + err.message;
+                statusMsgModal.className = "error";
+
+                sendBtnModal.disabled = true;
+                grecaptcha.reset();
+                captchaPassedModal = false;
+                sendBtnModal.textContent = "Send Feedback";
+            }
+        });
+
+        // --- 💌 FEEDBACK SYSTEM ---
+        let captchaPassed = false;
+
+        function onCaptchaSuccess() {
+            captchaPassed = true;
+            const sendBtn = document.getElementById("sendBtn");
+            sendBtn.disabled = false;
+        }
+
+        function onCaptchaExpired() {
+            captchaPassed = false;
+            const sendBtn = document.getElementById("sendBtn");
+            sendBtn.disabled = true;
+        }
+
+        const form = document.getElementById("feedbackForm");
+        const sendBtn = document.getElementById("sendBtn");
+        const statusMsg = document.getElementById("statusMsg");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById("discordUsername").value.trim();
+            const serverLink = document.getElementById("serverLink").value.trim();
+            const feedback = document.getElementById("feedbackText").value.trim();
+            const token = grecaptcha.getResponse();
+
+            // Validation
+            if (!username || !feedback) {
+                statusMsg.textContent = "Uhm You must enter a username and feedback.";
+                statusMsg.className = "error";
+                return;
+            }
+
+            if (!captchaPassed || !token) {
+                statusMsg.textContent = "Ahh Please complete the captcha first.";
+                statusMsg.className = "error";
+                return;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.textContent = "✨ Sending...";
+            statusMsg.textContent = "";
+
+            try {
+                const res = await fetch("/api/feedback", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, serverLink, feedback, token }),
+                });
+
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    throw new Error(data.message || `HTTP ${res.status}`);
+                }
+
+                statusMsg.textContent = "Hehe yes Feedback sent successfully! Thank you so much! 💕";
+                statusMsg.className = "success";
+                form.reset();
+
+                captchaPassed = false;
+                grecaptcha.reset();
+                sendBtn.disabled = true;
+                sendBtn.textContent = "Send Feedback";
+            } catch (err) {
+                console.error("Frontend error:", err);
+                statusMsg.textContent = "Uhm Failed to send feedback: " + err.message;
+                statusMsg.className = "error";
+
+                sendBtn.disabled = true;
+                grecaptcha.reset();
+                captchaPassed = false;
+                sendBtn.textContent = "Send Feedback";
+            }
+        });
     </script>
 </body>
 </html>
