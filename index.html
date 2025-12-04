@@ -637,9 +637,17 @@
             .demo-section { padding: 20px; }
             .cmd-grid { grid-template-columns: 1fr; }
             .hero-content h1 { font-size: 2rem; }
-            .navbar { justify-content: center; }
-            .navbar .nav-actions { display: none; }
+            .navbar { justify-content: space-between; padding: 0.8rem 1rem; }
+            .navbar .nav-actions { display: flex; }
             .logo span { display: inline; }
+            .logo { font-size: 1.2rem; }
+            .logo-image { width: 35px; height: 35px; }
+            .btn { padding: 10px 20px; font-size: 0.9rem; }
+            .btn-icon-only { padding: 8px; width: 38px; height: 38px; }
+            .hero-content { padding: 0 10px; }
+            .hero-content p { font-size: 1.1rem; }
+            .hero-badges { gap: 10px; }
+            .badge-item { font-size: 0.85rem; padding: 6px 12px; }
         }
         
         /* Reduced Motion */
@@ -751,7 +759,7 @@
     <div id="loading-screen">
         <div class="loading-container">
             <div class="loading-image">
-                <img src="https://i.ibb.co/7NGTMkM4/image.webp" alt="Kala Billa Loading">
+                <img src="main.png" alt="Kala Billa Loading">
             </div>
             <div class="loading-text">Kala Billa</div>
             <div class="loading-dots">.</div>
@@ -771,7 +779,7 @@
     <nav class="navbar">
         <a href="#" class="logo">
             <div class="logo-image">
-                <img src="https://i.ibb.co/7NGTMkM4/image.webp" alt="Kala Billa">
+                <img src="main.png" alt="Kala Billa">
             </div>
             <span>Kala Billa</span>
         </a>
@@ -794,7 +802,7 @@
             <h1>Kala Billa — Our awesome<br><span>Discord Companion</span></h1>
             <p>Cute, comfy, and always online. The perfect mix of memes, AI chat, moderation, and giveaways for your community.</p>
             
-            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: inherit;">
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
                 <a href="#" id="hero-invite-btn" class="btn btn-primary" onclick="confettiEffect(event)">
                     <i class="fas fa-star"></i> Invite Kala Billa
                 </a>
@@ -916,7 +924,7 @@
 
             <!-- Player -->
             <div id="player-cat" class="player-cat">
-                <img src="https://i.ibb.co/7NGTMkM4/image.webp" alt="Kala Billa" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                <img src="main.png" alt="Kala Billa" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
             </div>
         </div>
     </section>
